@@ -1,5 +1,5 @@
 <div class="es-control">
-  <div class="es-input" {{action 'focus'}}>
+  <div class="input-field" {{action 'focus'}}>
     {{#if hasValues}}
       <span class="es-selections">
         {{#each values as |option|}}
@@ -13,20 +13,19 @@
     <input type="text"
       autocomplete="off"
       autofocus={{autofocus}}
-      placeholder={{unless hasValues placeholder ''}}
       readonly={{unless canSearch 'readonly'}}
 
       oninput={{action 'change' value='target.value'}}
       onkeydown={{action 'keypress'}}
       onfocus={{action 'focus'}}
       onblur={{action 'blur'}}>
-  </div>
 
-  {{#if canClear}}
-    <span class="es-clear-zone" title="Clear" aria-label="Clear" {{action 'clear'}}>
-      <span class="es-clear">×</span>
-    </span>
-  {{/if}}
+    <label class="{{if isActive 'active'}}">
+      {{label}}
+    </label>
+
+    {{yield}}
+  </div>
 
   {{#if hasDropdown}}
     <span class="es-arrow-zone" {{action 'dropdown' on='mouseDown'}}>
@@ -36,7 +35,7 @@
 </div>
 
 {{#if isOpen}}
-  <div class="es-options">
+  <div class="es-options z-depth-1">
     {{component dropdown parent=this
       model=model token=token values=values
       labelKey=labelKey valueKey=valueKey
