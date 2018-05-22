@@ -10,7 +10,7 @@
       </span>
     {{/if}}
 
-    <input type="text"
+    <input type="text" class="{{if isValid 'validate' 'invalid'}}"
       autocomplete="off"
       autofocus={{autofocus}}
       readonly={{unless canSearch 'readonly'}}
@@ -24,7 +24,9 @@
       {{label}}
     </label>
 
-    {{yield}}
+    {{#if requiredMessage}}
+      <span class="helper-text" data-error={{requiredMessage}} />
+    {{/if}}
   </div>
 
   {{#if hasDropdown}}
