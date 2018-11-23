@@ -2,7 +2,7 @@ import { and, bool, not, notEmpty, or } from '@ember/object/computed';
 import Component from '@ember/component';
 import { computed, get } from '@ember/object';
 import Evented from '@ember/object/evented';
-import { isPresent, isBlank } from '@ember/utils';
+import { isNone } from '@ember/utils';
 import { run } from '@ember/runloop';
 import layout from '../templates/components/x-select';
 
@@ -52,7 +52,7 @@ export default Component.extend(Evented, {
     let token = this.get('token');
     let option = this.get('value');
 
-    if (isPresent(token) && isPresent(option)) {
+    if (!isNone(token) && !isNone(option)) {
       let { label } = this.retrieveOption(option);
       return token !== label;
     }
@@ -76,7 +76,7 @@ export default Component.extend(Evented, {
     this._super(...arguments);
 
     let value = this.get('value');
-    if (isPresent(value)) {
+    if (!isNone(value)) {
       run.next(this, () => this.setOption(value));
     }
   },
@@ -141,7 +141,7 @@ export default Component.extend(Evented, {
         this.onChange(query);
       }
 
-      if (isPresent(query)) {
+      if (!isNone(query)) {
         this.open();
       }
     },
@@ -189,7 +189,7 @@ export default Component.extend(Evented, {
       switch (e.keyCode) {
         case 8: { // Backspace
           let values = this.get('values');
-          if (isPresent(values) && this.get('token') === '') {
+          if (!isNone(values) && this.get('token') === '') {
             let last = this.getElement(values, get(values, 'length') - 1);
             this.onRemove(last);
             e.preventDefault();
@@ -234,8 +234,8 @@ export default Component.extend(Evented, {
 
     select(option, selected) {
       let isNew = !selected && this.get('freeText') && this.get('isDirty');
-      let allowNew = isPresent(this.onCreate);
-      let valid = isPresent(option);
+      let allowNew = !isNone(this.onCreate);
+      let valid = !isNone(option);
 
       /* Notify when option is either
        *  - selected
@@ -274,26 +274,30 @@ export default Component.extend(Evented, {
     let model = this.get('model');
     let label = option;
     let value = option;
+    //add placeholder to enable the case where selecting one option is only for typing, so no need to display the option's label.
+    let placeholder = null;
 
-    if (isBlank(option)) {
+    if (isNone(option)) {
       label = '';
     } else if (typeof option === 'object') {
       label = get(option, this.get('labelKey'));
       value = get(option, this.get('valueKey'));
-    } else if (isPresent(model) && typeof this.getElement(model, 0) === 'object') {
+      if (this.get('valuePlaceholder')) placeholder = get(option, this.get('valuePlaceholder'));
+    } else if (!isNone(model) && typeof this.getElement(model, 0) === 'object') {
       let id = this.get('valueKey');
       option = model.filter(x => get(x, id) === option).shift();
 
       if (option) {
         label = get(option, this.get('labelKey'));
+        if (this.get('valuePlaceholder')) placeholder = get(option, this.get('valuePlaceholder'));
       }
     }
 
-    return { option, value, label };
+    return { option, value, label, placeholder };
   },
 
   setOption(selection, selected, notify) {
-    let { option, value, label } = this.retrieveOption(selection);
+    let { option, value, label, placeholder } = this.retrieveOption(selection);
 
     if (this.get('multiple')) {
       label = '';
@@ -310,7 +314,13 @@ export default Component.extend(Evented, {
     // Ensure the component hasn't been destroyed before updating
     let input = this.get('input');
     if (input) {
-      input.value = label;
+      if (isNone(placeholder)) {
+        input.value = label;
+      } else {
+        //usually the value is empty and display the placeholder for tying.
+        input.value = value;
+        input.placeholder = placeholder;
+      }
     }
 
     this.set('isDirty', false);
