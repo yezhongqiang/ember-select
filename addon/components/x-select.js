@@ -8,6 +8,10 @@ import layout from '../templates/components/x-select';
 
 const isEdgeIe = typeof StyleMedia !== 'undefined';
 
+let isUndefined = function(v) {
+  return v === undefined;
+};
+
 export default Component.extend(Evented, {
   layout,
   classNames: ['ember-select'],
@@ -277,9 +281,9 @@ export default Component.extend(Evented, {
     //add placeholder to enable the case where selecting one option is only for typing, so no need to display the option's label.
     let placeholder = null;
 
-    if (isNone(option)) {
+    if (isUndefined(option)) {
       label = '';
-    } else if (typeof option === 'object') {
+    } else if (typeof option === 'object' && !isNone(option)) {
       label = get(option, this.get('labelKey'));
       value = get(option, this.get('valueKey'));
       if (this.get('valuePlaceholder')) placeholder = get(option, this.get('valuePlaceholder'));
