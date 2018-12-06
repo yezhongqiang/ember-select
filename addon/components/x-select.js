@@ -323,6 +323,7 @@ export default Component.extend(Evented, {
         input.placeholder = placeholder;
       }
     }
+    Ember.Logger.log('seletion value is ['+selection+']', option, value, label, placeholder);
     Ember.Logger.log('input value before on select', input.value, this.get('model'));
     this.set('isDirty', false);
 
