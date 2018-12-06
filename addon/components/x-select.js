@@ -11,7 +11,8 @@ const isEdgeIe = typeof StyleMedia !== 'undefined';
 let isUndefined = function(v) {
   return v === undefined;
 };
-
+// make changes to make it support null or '' option value.
+// and support place holder for if there is one for the option.
 export default Component.extend(Evented, {
   layout,
   classNames: ['ember-select'],
@@ -56,10 +57,8 @@ export default Component.extend(Evented, {
     let token = this.get('token');
     let option = this.get('value');
 
-    if (!isNone(token) && !isNone(option)) {
-      let { label } = this.retrieveOption(option);
-      return token !== label;
-    }
+    let { label } = this.retrieveOption(option);
+    return token !== label;
   }),
 
   init() {
@@ -80,9 +79,7 @@ export default Component.extend(Evented, {
     this._super(...arguments);
 
     let value = this.get('value');
-    if (!isNone(value)) {
-      run.next(this, () => this.setOption(value));
-    }
+    run.next(this, () => this.setOption(value));
   },
 
   didUpdateAttrs() {
@@ -239,7 +236,7 @@ export default Component.extend(Evented, {
     select(option, selected) {
       let isNew = !selected && this.get('freeText') && this.get('isDirty');
       let allowNew = !isNone(this.onCreate);
-      let valid = !isNone(option);
+      let valid = true; //!isNone(option); to support null option.
 
       /* Notify when option is either
        *  - selected

@@ -93,94 +93,96 @@ Group example (`id` / `name` properties):
   dropdown='select-dropdown-group'
   onSelect=(action 'select')}}
 ```
-
+Note:
+originally it doesn't support null or '' value or placeholder for one option.
+forked to support those features.
 
 ### Available actions
 #### onChange(input)
 Fired when input changes.
 
 #### onClear()
-Fired when the input was cleared.  
+Fired when the input was cleared.
 Useful when `multiple` is enabled.
 
 #### onCreate(option)
-Avaliable when `multiple` is enabled.  
-Fired when a new option was created.  
+Avaliable when `multiple` is enabled.
+Fired when a new option was created.
 *Note*: Setting this will allow the creation of new options.
 
 #### onRemove(option)
-Available when `multiple` is enabled.  
+Available when `multiple` is enabled.
 Fired when an option was removed.
 
 #### onSelect(value, option, isSelected)
-Fired when an option was selected.  
-`value` and `option` are different only when the model is an object.  
+Fired when an option was selected.
+`value` and `option` are different only when the model is an object.
 `isSelected` is useful if `freeText` is enabled.
 
 
 ### Available options
 #### autofocus
-Default: `false`  
-Accepts: `boolean`  
+Default: `false`
+Accepts: `boolean`
 Sets the focus on the element.
 
 #### canSearch
-Default: `true`  
-Accepts: `boolean`  
-Enable search.  
+Default: `true`
+Accepts: `boolean`
+Enable search.
 Disabling will result in a standard `select` dropdown.
 
 #### disabled
-Default: `false`  
-Accepts: `boolean`  
+Default: `false`
+Accepts: `boolean`
 Disable input.
 
 #### dropdown
-Default: `select-dropdown`  
-Accepts: `component`  
-Dropdown component to be rendered.  
+Default: `select-dropdown`
+Accepts: `component`
+Dropdown component to be rendered.
 *Note*: For groups use `select-dropdown-group`.
 
 #### freeText
-Default: `false`  
-Accepts: `boolean`  
+Default: `false`
+Accepts: `boolean`
 Allow any input set and not just a provided option.
 
 #### labelKey
-Default: `label`  
-Accepts: `string`  
+Default: `label`
+Accepts: `string`
 The property with the label, for objects.
 
 #### openOnFocus
-Default: `false`  
-Accepts: `boolean`  
+Default: `false`
+Accepts: `boolean`
 Open the dropdown when input has focus.
 
 #### placeholder
-Default: `Type...`  
-Accepts: `string`  
-Placeholder text to be displayed.  
+Default: `Type...`
+Accepts: `string`
+Placeholder text to be displayed.
 Note: IE placeholders are disabled because of a [bug](https://connect.microsoft.com/IE/feedback/details/810538/).
 
 #### required
-Default: `false`  
-Accepts: `boolean`  
+Default: `false`
+Accepts: `boolean`
 Revert changes when leaving input if an option wasn't selected.
 
 #### value
-Default: empty `string`  
-Accepts: `string`, `option`  
+Default: empty `string`
+Accepts: `string`, `option`
 Selected value.
 
 #### valueKey
-Default: `value`  
-Accepts: `string`  
+Default: `value`
+Accepts: `string`
 The property with the value, for objects.
 
 #### values
-Default: `undefined`  
-Accepts: `array`  
-Array of selected values.  
+Default: `undefined`
+Accepts: `array`
+Array of selected values.
 Note: Setting this will enable `multiple` selections.
 
 
